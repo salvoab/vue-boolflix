@@ -19,6 +19,7 @@
         </header>
 
         <main>
+            <h3 v-if="noMoviesResult && noTvShowsResult">Nessun Film o Serie TV trovati</h3>
             <!-- section movies -->
             <section>
                 <div v-for="movie in movies" class="card">
@@ -27,7 +28,7 @@
                         <li v-if="movie.title != movie.original_title">Titolo originale: {{movie.original_title}}</li>
                         <li>
                             Lingua originale: 
-                            <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" alt="">
+                            <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" :alt="movie.original_language">
                             <span v-else>{{movie.original_language.toUpperCase()}}</span>
                         </li>
                         <li>
@@ -49,7 +50,7 @@
                         <li v-if="show.name != show.original_name">Titolo originale: {{show.original_name}}</li>
                         <li>
                             Lingua originale: 
-                            <img v-if="isFlagImage(show.original_language)" :src="'./assets/img/' + show.original_language + '.png'" alt="">
+                            <img v-if="isFlagImage(show.original_language)" :src="'./assets/img/' + show.original_language + '.png'" :alt="show.original_language">
                             <span v-else>{{show.original_language.toUpperCase()}}</span>
                         </li>
                         <li>
