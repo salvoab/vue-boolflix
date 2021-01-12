@@ -15,6 +15,10 @@ nav{
 main{
     max-width: 80%;
     margin: auto;
+}
+
+section{
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
 }

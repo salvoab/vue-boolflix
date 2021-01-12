@@ -19,24 +19,49 @@
         </header>
 
         <main>
-            <div v-for="movie in movies" class="card">
-                <ul>
-                    <li>Titolo: {{movie.title}}</li>
-                    <li v-if="movie.original_language != 'it'">Titolo originale: {{movie.original_title}}</li>
-                    <li>
-                        Lingua originale: 
-                        <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" alt="">
-                        <span v-else>{{movie.original_language.toUpperCase()}}</span>
-                    </li>
-                    <li>
-                        Voto:
-                        <div class="stars">
-                            <i v-for="star in starsVote(movie.vote_average).stars" class="fas fa-star fa-fw"></i>
-                            <i v-for="emptyStar in starsVote(movie.vote_average).emptyStars" class="far fa-star fa-fw"></i>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <!-- section movies -->
+            <section>
+                <div v-for="movie in movies" class="card">
+                    <ul>
+                        <li>Titolo: {{movie.title}}</li>
+                        <li v-if="movie.title != movie.original_title">Titolo originale: {{movie.original_title}}</li>
+                        <li>
+                            Lingua originale: 
+                            <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" alt="">
+                            <span v-else>{{movie.original_language.toUpperCase()}}</span>
+                        </li>
+                        <li>
+                            Voto:
+                            <div class="stars">
+                                <i v-for="star in starsVote(movie.vote_average).stars" class="fas fa-star fa-fw"></i>
+                                <i v-for="emptyStar in starsVote(movie.vote_average).emptyStars" class="far fa-star fa-fw"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- section TV Shows -->
+            <section>
+                <div v-for="show in tvShows" class="card">
+                    <ul>
+                        <li>Titolo: {{show.name}}</li>
+                        <li v-if="show.name != show.original_name">Titolo originale: {{show.original_name}}</li>
+                        <li>
+                            Lingua originale: 
+                            <img v-if="isFlagImage(show.original_language)" :src="'./assets/img/' + show.original_language + '.png'" alt="">
+                            <span v-else>{{show.original_language.toUpperCase()}}</span>
+                        </li>
+                        <li>
+                            Voto:
+                            <div class="stars">
+                                <i v-for="star in starsVote(show.vote_average).stars" class="fas fa-star fa-fw"></i>
+                                <i v-for="emptyStar in starsVote(show.vote_average).emptyStars" class="far fa-star fa-fw"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </main>
     </div>
 
