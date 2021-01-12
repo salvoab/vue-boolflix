@@ -16,6 +16,11 @@ let app = new Vue({
                     .catch(error => console.log(error));
                 
             }
+        },
+        starsVote(vote){
+            const stars = Math.ceil(vote / 2);
+            const emptyStars = 5 - stars;
+            return {stars, emptyStars};
         }
     }
 });

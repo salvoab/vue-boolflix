@@ -3,3 +3,31 @@
     padding: 0;
     box-sizing: border-box;
 }
+header{
+    padding: 50px;
+    margin-bottom: 30px;
+}
+
+nav{
+    text-align: right;
+}
+
+main{
+    max-width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card{
+    width: 220px;
+    height: 300px;
+    padding: 22px;
+    margin-left: 50px;
+    margin-bottom: 50px;
+    border: 2px solid black;
+}
+
+.stars{
+    color: #dfdf54;
+}
