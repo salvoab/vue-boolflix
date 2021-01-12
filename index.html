@@ -13,7 +13,7 @@
     <div id="app">
         <header>
             <nav>
-                <input type="text" name="search-input" id="search-input" v-model="searchInput">
+                <input type="text" name="search-input" id="search-input" v-model="searchInput" @keyup.enter="search">
                 <button @click="search">Cerca</button>
             </nav>
         </header>
@@ -22,6 +22,7 @@
             <h3 v-if="noMoviesResult && noTvShowsResult">Nessun Film o Serie TV trovati</h3>
             <!-- section movies -->
             <section>
+                <h2 v-if="!noMoviesResult">Film</h2>
                 <div v-for="movie in movies" class="card">
                     <ul>
                         <li>Titolo: {{movie.title}}</li>
@@ -44,6 +45,7 @@
 
             <!-- section TV Shows -->
             <section>
+                <h2 v-if="!noTvShowsResult">Serie TV</h2>
                 <div v-for="show in tvShows" class="card">
                     <ul>
                         <li>Titolo: {{show.name}}</li>
