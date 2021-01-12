@@ -21,6 +21,10 @@ let app = new Vue({
             const stars = Math.ceil(vote / 2);
             const emptyStars = 5 - stars;
             return {stars, emptyStars};
+        },
+        isFlagImage(language){
+            // Restituisce vero se la lingua è una di quelle presenti nella cartella img, falso altrimenti
+            return language == 'en' || language == 'it' || language == 'es' || language == 'fr' || language == 'de';
         }
     }
 });

@@ -23,7 +23,11 @@
                 <ul>
                     <li>Titolo: {{movie.title}}</li>
                     <li v-if="movie.original_language != 'it'">Titolo originale: {{movie.original_title}}</li>
-                    <li>Lingua originale: {{movie.original_language}}</li>
+                    <li>
+                        Lingua originale: 
+                        <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" alt="">
+                        <span v-else>{{movie.original_language.toUpperCase()}}</span>
+                    </li>
                     <li>
                         Voto:
                         <div class="stars">
