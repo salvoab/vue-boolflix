@@ -11,10 +11,21 @@
     <div id="app">
         <header>
             <nav>
-                <input type="text" name="search-input" id="search-input">
-                <button>Cerca</button>
+                <input type="text" name="search-input" id="search-input" v-model="searchInput">
+                <button @click="search">Cerca</button>
             </nav>
         </header>
+
+        <main>
+            <div v-for="movie in movies" class="card">
+                <ul>
+                    <li>Titolo: {{movie.title}}</li>
+                    <li>Titolo originale: {{movie.original_title}}</li>
+                    <li>Lingua originale: {{movie.original_language}}</li>
+                    <li>Voto: {{movie.vote_average}}</li>
+                </ul>
+            </div>
+        </main>
     </div>
 
     <!-- Vue Dev CDN -->
