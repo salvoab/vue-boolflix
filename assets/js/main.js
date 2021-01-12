@@ -19,11 +19,7 @@ let app = new Vue({
                 axios.get(url)
                     .then(response => {
                         this.movies = response.data.results;
-                        if(response.data.total_results == 0){
-                            this.noMoviesResult = true;
-                        } else {
-                            this.noMoviesResult = false;
-                        }
+                        this.noMoviesResult = isZero(response.data.total_results);
                     })
                     .catch(error => console.log(error));
                 
@@ -32,11 +28,7 @@ let app = new Vue({
                 axios.get(url)
                     .then(response => {
                         this.tvShows = response.data.results;
-                        if(response.data.total_results == 0){
-                            this.noTvShowsResult = true;
-                        } else {
-                            this.noTvShowsResult = false;
-                        }
+                        this.noTvShowsResult = isZero(response.data.total_results);
                     })
                     .catch(error => console.log(error));
             }
@@ -52,3 +44,8 @@ let app = new Vue({
         }
     }
 });
+
+
+function isZero(value){
+    return value == 0;
+}
