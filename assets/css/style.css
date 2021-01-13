@@ -29,12 +29,9 @@ section h2{
 }
 
 .card{
-    width: 220px;
-    height: 300px;
-    padding: 22px;
+    width: 342px;
     margin-left: 50px;
     margin-bottom: 50px;
-    border: 2px solid black;
 }
 
 .stars{
