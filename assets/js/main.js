@@ -41,6 +41,12 @@ let app = new Vue({
         isFlagImage(language){
             // Restituisce vero se la lingua è una di quelle presenti nella cartella img, falso altrimenti
             return language == 'en' || language == 'it' || language == 'es' || language == 'fr' || language == 'de';
+        },
+        formatOverview(overview){
+            if(overview.length <= 140){
+                return overview;
+            }
+            return overview.substring(1, 140) + '...';
         }
     }
 });

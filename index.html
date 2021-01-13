@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boolflix</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <link rel="stylesheet" href="./assets/css/style.css">
     <!-- axios CDN -->
@@ -33,19 +33,23 @@
 
                     <div class="overlay">
                         <ul>
-                            <li>Titolo: {{movie.title}}</li>
+                            <li> <strong>Titolo:</strong> {{movie.title}}</li>
                             <li v-if="movie.title != movie.original_title">Titolo originale: {{movie.original_title}}</li>
                             <li>
-                                Lingua originale: 
+                                <strong>Lingua originale:</strong> 
                                 <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" :alt="movie.original_language">
                                 <span v-else>{{movie.original_language.toUpperCase()}}</span>
                             </li>
                             <li>
-                                Voto:
+                                <strong>Voto:</strong>
                                 <div class="stars">
                                     <i v-for="star in starsVote(movie.vote_average).stars" class="fas fa-star fa-fw"></i>
                                     <i v-for="emptyStar in starsVote(movie.vote_average).emptyStars" class="far fa-star fa-fw"></i>
                                 </div>
+                            </li>
+                            <li>
+                                <strong>Overview:</strong>
+                                <p>{{formatOverview(movie.overview)}}</p>
                             </li>
                         </ul>
                     </div>
@@ -63,19 +67,23 @@
 
                     <div class="overlay">
                         <ul>
-                            <li>Titolo: {{show.name}}</li>
+                            <li> <strong>Titolo:</strong> {{show.name}}</li>
                             <li v-if="show.name != show.original_name">Titolo originale: {{show.original_name}}</li>
                             <li>
-                                Lingua originale: 
+                                <strong>Lingua originale:</strong> 
                                 <img v-if="isFlagImage(show.original_language)" :src="'./assets/img/' + show.original_language + '.png'" :alt="show.original_language">
                                 <span v-else>{{show.original_language.toUpperCase()}}</span>
                             </li>
                             <li>
-                                Voto:
+                                <strong>Voto:</strong>
                                 <div class="stars">
                                     <i v-for="star in starsVote(show.vote_average).stars" class="fas fa-star fa-fw"></i>
                                     <i v-for="emptyStar in starsVote(show.vote_average).emptyStars" class="far fa-star fa-fw"></i>
                                 </div>
+                            </li>
+                            <li>
+                                <strong>Overview:</strong>
+                                <p>{{formatOverview(show.overview)}}</p>
                             </li>
                         </ul>
                     </div>
