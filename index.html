@@ -25,9 +25,9 @@
             <!-- section movies -->
             <section>
                 <h2 v-if="!noMoviesResult">Film</h2>
-                <div v-for="movie in movies" class="card">
-                    <img v-if="movie.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`">
-                    <div v-else class="cover-placeholder">
+                <div v-for="movie in movies" class="card" :style="getBackgroundCover(movie.poster_path)">
+                    <!-- <img v-if="movie.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`"> -->
+                    <div v-if="movie.poster_path == null" class="cover-placeholder">
                         <h3>{{movie.title}}</h3>
                     </div>
 
@@ -59,7 +59,7 @@
             <!-- section TV Shows -->
             <section>
                 <h2 v-if="!noTvShowsResult">Serie TV</h2>
-                <div v-for="show in tvShows" class="card" :style=" (show.poster_path != null) ? `background-image: url(https://image.tmdb.org/t/p/w342${show.poster_path});` : '' ">
+                <div v-for="show in tvShows" class="card" :style="getBackgroundCover(show.poster_path)">
                     <!-- <img v-if="show.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${show.poster_path}`"> -->
                     <div v-if="show.poster_path == null" class="cover-placeholder">
                         <h3>{{show.name}}</h3>

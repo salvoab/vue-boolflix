@@ -43,10 +43,16 @@ let app = new Vue({
             return language == 'en' || language == 'it' || language == 'es' || language == 'fr' || language == 'de';
         },
         formatOverview(overview){
-            if(overview.length <= 140){
+            if(overview.length <= 130){
                 return overview;
             }
-            return overview.substring(1, 140) + '...';
+            return overview.substring(0, 130) + '...';
+        },
+        getBackgroundCover(remotePath){
+            if (remotePath == null){
+                return '';
+            }
+            return `background-image: url(https://image.tmdb.org/t/p/w342${remotePath});`
         }
     }
 });
