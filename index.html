@@ -47,7 +47,7 @@
                                     <i v-for="emptyStar in starsVote(movie.vote_average).emptyStars" class="far fa-star fa-fw"></i>
                                 </div>
                             </li>
-                            <li>
+                            <li v-if="movie.overview != '' ">
                                 <strong>Overview:</strong>
                                 <p>{{formatOverview(movie.overview)}}</p>
                             </li>
@@ -81,7 +81,7 @@
                                     <i v-for="emptyStar in starsVote(show.vote_average).emptyStars" class="far fa-star fa-fw"></i>
                                 </div>
                             </li>
-                            <li>
+                            <li v-if="show.overview != ''">
                                 <strong>Overview:</strong>
                                 <p>{{formatOverview(show.overview)}}</p>
                             </li>

@@ -100,6 +100,9 @@ li{
     width: 36px;
     vertical-align: middle;
 }
+.overlay p{
+    font-size: 14px;
+}
 
 .card:hover > .overlay{
     display: block;
