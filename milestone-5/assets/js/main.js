@@ -17,8 +17,7 @@ let app = new Vue({
         tvShowsGenres: [] // array di oggetti con chiavi id, genresString
     },
     methods: {
-        search(){
-            // Ad ogni nuova ricerca elimino le info aggiuntive della ricerca precedente
+        resetAdditionalInfo(){
             this.moviesCastReady=false;
             this.moviesCast.splice(0, this.moviesCast.length);
             this.moviesGenresReady=false;
@@ -27,37 +26,45 @@ let app = new Vue({
             this.tvShowsCast.splice(0, this.tvShowsCast.length);
             this.tvShowsGenresReady=false;
             this.tvShowsGenres.splice(0, this.tvShowsGenres.length);
-
+        },
+        searchMovies(query){
+            //URL per film
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=027db1a08822b62e35522e7cae42f3bf&language=it-IT&query=${query}`;
+            axios.get(url)
+                .then(response => {
+                    this.movies = response.data.results;
+                    this.noMoviesResult = isZero(response.data.total_results);
+                    if(!this.noMoviesResult){
+                        this.getAllMoviesAndShowsCast('movie');
+                        this.getAllGenresInThisPage('movie');
+                    }
+                })
+                .catch(error => console.log(error));
+        },
+        searchTvShows(query){
+            //URL per serie TV
+            const url =`https://api.themoviedb.org/3/search/tv?api_key=027db1a08822b62e35522e7cae42f3bf&language=it_IT&query=${query}`;
+            axios.get(url)
+                .then(response => {
+                    this.tvShows = response.data.results;
+                    this.noTvShowsResult = isZero(response.data.total_results);
+                    if(!this.noTvShowsResult){
+                        this.getAllMoviesAndShowsCast('tv');
+                        this.getAllGenresInThisPage('tv');
+                    }
+                })
+                .catch(error => console.log(error));
+        },
+        search(){
+            // Ad ogni nuova ricerca elimino le info aggiuntive della ricerca precedente
+            this.resetAdditionalInfo();
             if(this.searchInput === ""){
                 this.movies = [];
                 this.tvShows = [];
             } else {
                 const query = encodeURI(this.searchInput);
-                //URL per film
-                let url = `https://api.themoviedb.org/3/search/movie?api_key=027db1a08822b62e35522e7cae42f3bf&language=it-IT&query=${query}`;
-                axios.get(url)
-                    .then(response => {
-                        this.movies = response.data.results;
-                        this.noMoviesResult = isZero(response.data.total_results);
-                        if(!this.noMoviesResult){
-                            this.getAllMoviesAndShowsCast('movie');
-                            this.getAllGenresInThisPage('movie');
-                        }
-                    })
-                    .catch(error => console.log(error));
-                
-                //URL per serie TV
-                url =`https://api.themoviedb.org/3/search/tv?api_key=027db1a08822b62e35522e7cae42f3bf&language=it_IT&query=${query}`;
-                axios.get(url)
-                    .then(response => {
-                        this.tvShows = response.data.results;
-                        this.noTvShowsResult = isZero(response.data.total_results);
-                        if(!this.noTvShowsResult){
-                            this.getAllMoviesAndShowsCast('tv');
-                            this.getAllGenresInThisPage('tv');
-                        }
-                    })
-                    .catch(error => console.log(error));
+                this.searchMovies(query);
+                this.searchTvShows(query)
             }
         },
         starsVote(vote){
