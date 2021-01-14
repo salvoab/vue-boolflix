@@ -10,7 +10,11 @@ let app = new Vue({
         moviesCastReady: false,
         moviesCast: [], // array di oggetti con chiavi id, cast[]
         moviesGenresReady: false,
-        moviesGenres: [] // array di oggetti con chiavi id, genresString
+        moviesGenres: [], // array di oggetti con chiavi id, genresString
+        tvShowsCastReady: false,
+        tvShowsCast: [], // array di oggetti con chiavi id, cast[]
+        tvShowsGenresReady: false,
+        tvShowsGenres: [] // array di oggetti con chiavi id, genresString
     },
     methods: {
         search(){
@@ -19,6 +23,10 @@ let app = new Vue({
             this.moviesCast.splice(0, this.moviesCast.length);
             this.moviesGenresReady=false;
             this.moviesGenres.splice(0, this.moviesGenres.length);
+            this.tvShowsCastReady=false;
+            this.tvShowsCast.splice(0, this.tvShowsCast.length);
+            this.tvShowsGenresReady=false;
+            this.tvShowsGenres.splice(0, this.tvShowsGenres.length);
 
             if(this.searchInput === ""){
                 this.movies = [];
@@ -33,7 +41,7 @@ let app = new Vue({
                         this.noMoviesResult = isZero(response.data.total_results);
                         if(!this.noMoviesResult){
                             this.getAllMoviesCast();
-                            this.getAllMoviesGenres();
+                            this.getAllGenresInThisPage('movie');
                         }
                     })
                     .catch(error => console.log(error));
@@ -44,6 +52,9 @@ let app = new Vue({
                     .then(response => {
                         this.tvShows = response.data.results;
                         this.noTvShowsResult = isZero(response.data.total_results);
+                        if(!this.noTvShowsResult){
+                            this.getAllGenresInThisPage('tv');
+                        }
                     })
                     .catch(error => console.log(error));
             }
@@ -109,13 +120,23 @@ let app = new Vue({
             if(typeOfShow === 'movie'){
                 const url = `https://api.themoviedb.org/3/movie/${id}?api_key=027db1a08822b62e35522e7cae42f3bf`;
                 return axios.get(url);
+            } else {
+                const url = `https://api.themoviedb.org/3/tv/${id}?api_key=027db1a08822b62e35522e7cae42f3bf`;
+                return axios.get(url);
             }
         },
-        getAllMoviesGenres(){
+        getAllGenresInThisPage(typeOfShow){
             const getRequests = [];
-            this.movies.forEach(movie => {
-                getRequests.push(this.getDetails(movie.id, 'movie'));
-            });
+            
+            if(typeOfShow === 'movie'){
+                this.movies.forEach(movie => {
+                    getRequests.push(this.getDetails(movie.id, typeOfShow));
+                });
+            } else {
+                this.tvShows.forEach(show => {
+                    getRequests.push(this.getDetails(show.id, typeOfShow));
+                });
+            }
 
             Promise.all(getRequests)
             .then(results => {
@@ -124,17 +145,30 @@ let app = new Vue({
                     const id = result.data.id;
                     result.data.genres.forEach(genre => genresString+= genre.name + ", ");
                     // Tolgo gli ultimi due caratteri: ', '
-                    genresString = genresString.substring(0, genresString.length-2)
-                    this.moviesGenres.push({id, genresString});
+                    genresString = genresString.substring(0, genresString.length-2);
+                    if(typeOfShow === 'movie'){
+                        this.moviesGenres.push({id, genresString});
+                    } else {
+                        this.tvShowsGenres.push({id, genresString});
+                    }
                 }) //parentesi del foreach
 
-                this.moviesGenresReady = true;
+                if(typeOfShow === 'movie'){
+                    this.moviesGenresReady = true;
+                } else {
+                    this.tvShowsGenresReady = true;
+                }
             })
             .catch(error => console.log(error));
         },
-        getGenresString(id){
-            if(this.moviesGenresReady){
+        getGenresString(id, typeOfShow){
+            if(this.moviesGenresReady && typeOfShow === 'movie'){
                 const genresString = this.moviesGenres.find(info => info.id == id).genresString;
+                return genresString;
+            }
+
+            if(this.tvShowsGenresReady && typeOfShow === 'tv'){
+                const genresString = this.tvShowsGenres.find(info => info.id == id).genresString;
                 return genresString;
             }
         }
