@@ -195,6 +195,14 @@ let app = new Vue({
                 return genresString;
             }
         }
+    },
+    updated(){
+        const overlays = document.querySelectorAll('.overlay');
+        for (overlay of overlays){
+            overlay.addEventListener('mouseenter', function(){
+                this.scrollTop = 0;
+            })
+        }
     }
 });
 
