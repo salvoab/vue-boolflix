@@ -5,7 +5,8 @@ let app = new Vue({
         tvShows: [],
         searchInput: "",
         noMoviesResult: false,
-        noTvShowsResult: false
+        noTvShowsResult: false,
+        flagImages: ['en', 'it', 'es', 'fr', 'de']
     },
     methods: {
         search(){
@@ -40,7 +41,7 @@ let app = new Vue({
         },
         isFlagImage(language){
             // Restituisce vero se la lingua è una di quelle presenti nella cartella img, falso altrimenti
-            return language == 'en' || language == 'it' || language == 'es' || language == 'fr' || language == 'de';
+            return this.flagImages.includes(language);
         },
         formatOverview(overview){
             if(overview.length <= 130){
