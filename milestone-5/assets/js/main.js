@@ -7,14 +7,18 @@ let app = new Vue({
         noMoviesResult: false,
         noTvShowsResult: false,
         flagImages: ['en', 'it', 'es', 'fr', 'de'],
-        moreMoviesDetailsReady: false,
-        moviesInfo: [] // vettore di oggetti con chiavi id, cast[] e genre[]
+        moviesCastReady: false,
+        moviesCast: [], // array di oggetti con chiavi id, cast[]
+        moviesGenresReady: false,
+        moviesGenres: [] // array di oggetti con chiavi id, genresString
     },
     methods: {
         search(){
             // Ad ogni nuova ricerca elimino le info aggiuntive della ricerca precedente
-            this.moreMoviesDetailsReady=false;
-            this.moviesInfo.splice(0, this.moviesInfo.length);
+            this.moviesCastReady=false;
+            this.moviesCast.splice(0, this.moviesCast.length);
+            this.moviesGenresReady=false;
+            this.moviesGenres.splice(0, this.moviesGenres.length);
 
             if(this.searchInput === ""){
                 this.movies = [];
@@ -28,7 +32,8 @@ let app = new Vue({
                         this.movies = response.data.results;
                         this.noMoviesResult = isZero(response.data.total_results);
                         if(!this.noMoviesResult){
-                            this.getMoreInfoForAllMovies();
+                            this.getAllMoviesCast();
+                            this.getAllMoviesGenres();
                         }
                     })
                     .catch(error => console.log(error));
@@ -65,16 +70,16 @@ let app = new Vue({
             return `background-image: url(https://image.tmdb.org/t/p/w342${remotePath});`
         },
         // Metodi per milestone 5
-        getMoreInfo(id, typeOfShow){
+        getCredits(id, typeOfShow){
             if(typeOfShow === 'movie'){
                 const url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=027db1a08822b62e35522e7cae42f3bf`;
                 return axios.get(url);
             }
         },
-        getMoreInfoForAllMovies(){
+        getAllMoviesCast(){
             const getRequests = [];
             this.movies.forEach(movie => {
-                getRequests.push(this.getMoreInfo(movie.id, 'movie'));
+                getRequests.push(this.getCredits(movie.id, 'movie'));
             });
 
             Promise.all(getRequests)
@@ -87,17 +92,50 @@ let app = new Vue({
                         cast.push(result.data.cast[actorCounter]);
                         actorCounter++;
                     }
-                    this.moviesInfo.push({id, cast});
+                    this.moviesCast.push({id, cast});
                 }) //parentesi del foreach
 
-                this.moreMoviesDetailsReady = true;
+                this.moviesCastReady = true;
             })
             .catch(error => console.log(error));
         },
         getCast(id){
-            if(this.moreMoviesDetailsReady){
-                const cast = this.moviesInfo.find(info => info.id == id).cast;
+            if(this.moviesCastReady){
+                const cast = this.moviesCast.find(info => info.id == id).cast;
                 return cast;
+            }
+        },
+        getDetails(id, typeOfShow){
+            if(typeOfShow === 'movie'){
+                const url = `https://api.themoviedb.org/3/movie/${id}?api_key=027db1a08822b62e35522e7cae42f3bf`;
+                return axios.get(url);
+            }
+        },
+        getAllMoviesGenres(){
+            const getRequests = [];
+            this.movies.forEach(movie => {
+                getRequests.push(this.getDetails(movie.id, 'movie'));
+            });
+
+            Promise.all(getRequests)
+            .then(results => {
+                results.forEach(result => {
+                    let genresString = '';
+                    const id = result.data.id;
+                    result.data.genres.forEach(genre => genresString+= genre.name + ", ");
+                    // Tolgo gli ultimi due caratteri: ', '
+                    genresString = genresString.substring(0, genresString.length-2)
+                    this.moviesGenres.push({id, genresString});
+                }) //parentesi del foreach
+
+                this.moviesGenresReady = true;
+            })
+            .catch(error => console.log(error));
+        },
+        getGenresString(id){
+            if(this.moviesGenresReady){
+                const genresString = this.moviesGenres.find(info => info.id == id).genresString;
+                return genresString;
             }
         }
     }
