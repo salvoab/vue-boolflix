@@ -95,6 +95,7 @@ li{
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     display: none;
+    overflow-y: auto;
 }
 .overlay img{
     width: 36px;
