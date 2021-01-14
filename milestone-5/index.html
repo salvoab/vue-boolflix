@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolflix</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- axios CDN -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <nav>
+                <img class="logo" src="./assets/img/boolflix.png" alt="logo boolflix">
+                <input type="text" name="search-input" id="search-input" v-model="searchInput" @keyup.enter="search">
+            </nav>
+        </header>
+
+        <main>
+            <h3 v-if="noMoviesResult && noTvShowsResult">Nessun Film o Serie TV trovati</h3>
+            <!-- section movies -->
+            <section>
+                <h2 v-if="!noMoviesResult">Film</h2>
+                <div v-for="movie in movies" class="card" :style="getBackgroundCover(movie.poster_path)">
+                    <!-- <img v-if="movie.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`"> -->
+                    <div v-if="movie.poster_path == null" class="cover-placeholder">
+                        <h3>{{movie.title}}</h3>
+                    </div>
+
+                    <div class="overlay">
+                        <ul>
+                            <li> <strong>Titolo:</strong> {{movie.title}}</li>
+                            <li v-if="movie.title != movie.original_title">Titolo originale: {{movie.original_title}}</li>
+                            <li>
+                                <strong>Lingua originale:</strong> 
+                                <img v-if="isFlagImage(movie.original_language)" :src="'./assets/img/' + movie.original_language + '.png'" :alt="movie.original_language">
+                                <span v-else>{{movie.original_language.toUpperCase()}}</span>
+                            </li>
+                            <li>
+                                <strong>Voto:</strong>
+                                <div class="stars">
+                                    <i v-for="star in starsVote(movie.vote_average).stars" class="fas fa-star fa-fw"></i>
+                                    <i v-for="emptyStar in starsVote(movie.vote_average).emptyStars" class="far fa-star fa-fw"></i>
+                                </div>
+                            </li>
+                            <li v-if="movie.overview != '' ">
+                                <strong>Overview:</strong>
+                                <p>{{formatOverview(movie.overview)}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- section TV Shows -->
+            <section>
+                <h2 v-if="!noTvShowsResult">Serie TV</h2>
+                <div v-for="show in tvShows" class="card" :style="getBackgroundCover(show.poster_path)">
+                    <!-- <img v-if="show.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${show.poster_path}`"> -->
+                    <div v-if="show.poster_path == null" class="cover-placeholder">
+                        <h3>{{show.name}}</h3>
+                    </div>
+
+                    <div class="overlay">
+                        <ul>
+                            <li> <strong>Titolo:</strong> {{show.name}}</li>
+                            <li v-if="show.name != show.original_name">Titolo originale: {{show.original_name}}</li>
+                            <li>
+                                <strong>Lingua originale:</strong> 
+                                <img v-if="isFlagImage(show.original_language)" :src="'./assets/img/' + show.original_language + '.png'" :alt="show.original_language">
+                                <span v-else>{{show.original_language.toUpperCase()}}</span>
+                            </li>
+                            <li>
+                                <strong>Voto:</strong>
+                                <div class="stars">
+                                    <i v-for="star in starsVote(show.vote_average).stars" class="fas fa-star fa-fw"></i>
+                                    <i v-for="emptyStar in starsVote(show.vote_average).emptyStars" class="far fa-star fa-fw"></i>
+                                </div>
+                            </li>
+                            <li v-if="show.overview != ''">
+                                <strong>Overview:</strong>
+                                <p>{{formatOverview(show.overview)}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Vue Dev CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- my script javascript -->
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>
