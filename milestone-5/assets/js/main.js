@@ -40,7 +40,7 @@ let app = new Vue({
                         this.movies = response.data.results;
                         this.noMoviesResult = isZero(response.data.total_results);
                         if(!this.noMoviesResult){
-                            this.getAllMoviesCast();
+                            this.getAllMoviesAndShowsCast('movie');
                             this.getAllGenresInThisPage('movie');
                         }
                     })
@@ -53,6 +53,7 @@ let app = new Vue({
                         this.tvShows = response.data.results;
                         this.noTvShowsResult = isZero(response.data.total_results);
                         if(!this.noTvShowsResult){
+                            this.getAllMoviesAndShowsCast('tv');
                             this.getAllGenresInThisPage('tv');
                         }
                     })
@@ -85,13 +86,22 @@ let app = new Vue({
             if(typeOfShow === 'movie'){
                 const url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=027db1a08822b62e35522e7cae42f3bf`;
                 return axios.get(url);
+            } else {
+                const url = `https://api.themoviedb.org/3/tv/${id}/credits?api_key=027db1a08822b62e35522e7cae42f3bf`;
+                return axios.get(url);
             }
         },
-        getAllMoviesCast(){
+        getAllMoviesAndShowsCast(typeOfShow){
             const getRequests = [];
-            this.movies.forEach(movie => {
-                getRequests.push(this.getCredits(movie.id, 'movie'));
-            });
+            if (typeOfShow === 'movie'){
+                this.movies.forEach(movie => {
+                    getRequests.push(this.getCredits(movie.id, 'movie'));
+                });
+            } else {
+                this.tvShows.forEach(show => {
+                    getRequests.push(this.getCredits(show.id, 'tv'));
+                });
+            }
 
             Promise.all(getRequests)
             .then(results => {
@@ -103,16 +113,29 @@ let app = new Vue({
                         cast.push(result.data.cast[actorCounter]);
                         actorCounter++;
                     }
-                    this.moviesCast.push({id, cast});
+                    if(typeOfShow === 'movie'){
+                        this.moviesCast.push({id, cast});
+                    } else {
+                        this.tvShowsCast.push({id, cast});
+                    }
                 }) //parentesi del foreach
 
-                this.moviesCastReady = true;
+                if(typeOfShow === 'movie'){
+                    this.moviesCastReady = true;
+                } else {
+                    this.tvShowsCastReady = true;
+                }
             })
             .catch(error => console.log(error));
         },
-        getCast(id){
-            if(this.moviesCastReady){
+        getCast(id, typeOfShow){
+            if(this.moviesCastReady && typeOfShow === 'movie'){
                 const cast = this.moviesCast.find(info => info.id == id).cast;
+                return cast;
+            }
+
+            if(this.tvShowsCastReady && typeOfShow === 'tv'){
+                const cast = this.tvShowsCast.find(info => info.id == id).cast;
                 return cast;
             }
         },

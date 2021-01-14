@@ -56,7 +56,7 @@
                         <!-- Milestone 5 -->
                         <ul v-if="moviesCastReady">
                             <li> <strong>Attori:</strong> </li>
-                            <li v-for="actor in getCast(movie.id)">
+                            <li v-for="actor in getCast(movie.id, 'movie')">
                                 {{actor.name}}
                             </li>
                             <li v-if="moviesGenresReady">
@@ -99,11 +99,11 @@
                         </ul>
 
                         <!-- Milestone 5 -->
-                        <ul>
+                        <ul v-if="tvShowsCastReady">
                             <li> <strong>Attori:</strong> </li>
-                            <!-- <li v-for="actor in getCast(show.id)">
+                            <li v-for="actor in getCast(show.id, 'tv')">
                                 {{actor.name}}
-                            </li> -->
+                            </li>
                             <li v-if="tvShowsGenresReady">
                                 <strong>Generi: </strong> {{getGenresString(show.id, 'tv')}}
                             </li>
