@@ -29,6 +29,8 @@ let app = new Vue({
             this.tvShowsCast.splice(0, this.tvShowsCast.length);
             this.tvShowsGenresReady=false;
             this.tvShowsGenres.splice(0, this.tvShowsGenres.length);
+            this.selectedMovieGenre = 'all';
+            this.selectedTvShowGenre = 'all';
         },
         searchMovies(query){
             //URL per film
@@ -225,24 +227,29 @@ let app = new Vue({
                 }
             })
             .catch(error => console.log(error));
+        }
+    },
+    computed: {
+        visibleMovies(){
+            if(this.selectedMovieGenre === 'all'){
+                return this.movies;
+            }
+            return this.movies.filter(movie => {
+                return movie.genre_ids.includes(parseInt(this.selectedMovieGenre));
+            });
         },
-        hasSelectedGenre(typeOfShow, id){
-            // TO-DO return true se il film o serie tv con un certo id, ha il genere selezionato
+        visibleTvShows(){
+            if(this.selectedTvShowGenre === 'all'){
+                return this.tvShows;
+            }
+            return this.tvShows.filter(movie => {
+                return movie.genre_ids.includes(parseInt(this.selectedTvShowGenre));
+            });
         }
     },
     mounted(){
         this.fillSelectGenre('movie');
-        this.fillSelectGenre('tv');
-
-        document.getElementById('movie-genre').addEventListener('change', function(){
-            this.selectedMovieGenre = this.value;
-            console.log('film',this.selectedMovieGenre);
-        });
-
-        document.getElementById('tv-show-genre').addEventListener('change', function(){
-            this.selectedTvShowGenre = this.value;
-            console.log('tv',this.selectedTvShowGenre);
-        });
+        this.fillSelectGenre('tv');    
     },
     updated(){
         const overlays = document.querySelectorAll('.overlay');

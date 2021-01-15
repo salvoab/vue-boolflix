@@ -26,12 +26,12 @@
             <section>
                 <div v-if="!noMoviesResult" class="section-header">
                     <h2>Film</h2>
-                    <select name="movie-genre" id="movie-genre">
-                        <option value="all">Tutti</option>
+                    <select name="movie-genre" id="movie-genre" v-model="selectedMovieGenre">
+                        <option value="all">Tutti i generi</option>
                     </select>
                 </div>
 
-                <div v-for="movie in movies" class="card" :style="getBackgroundCover(movie.poster_path)">
+                <div v-for="movie in visibleMovies" class="card" :style="getBackgroundCover(movie.poster_path)">
                     <!-- <img v-if="movie.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`"> -->
                     <div v-if="movie.poster_path == null" class="cover-placeholder">
                         <h3>{{movie.title}}</h3>
@@ -77,13 +77,12 @@
             <section>
                 <div v-if="!noTvShowsResult" class="section-header">
                     <h2>Serie TV</h2>
-                    <select name="tv-show-genre" id="tv-show-genre">
-                        <option value="all">Tutti</option>
+                    <select name="tv-show-genre" id="tv-show-genre" v-model="selectedTvShowGenre">
+                        <option value="all">Tutti i generi</option>
                     </select>
                 </div>
                 
-                <div v-for="show in tvShows" class="card" :style="getBackgroundCover(show.poster_path)">
-                    <!-- <img v-if="show.poster_path != null" :src="`https://image.tmdb.org/t/p/w342${show.poster_path}`"> -->
+                <div v-for="show in visibleTvShows" class="card" :style="getBackgroundCover(show.poster_path)">
                     <div v-if="show.poster_path == null" class="cover-placeholder">
                         <h3>{{show.name}}</h3>
                     </div>

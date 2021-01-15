@@ -47,9 +47,15 @@ section{
     display: flex;
     flex-wrap: wrap;
 }
-section h2{
+
+.section-header{
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: baseline;
+}
+.section-header select{
+    margin-left: 50px;
 }
 
 .card{
