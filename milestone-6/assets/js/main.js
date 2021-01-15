@@ -14,7 +14,10 @@ let app = new Vue({
         tvShowsCastReady: false,
         tvShowsCast: [], // array di oggetti con chiavi id, cast[]
         tvShowsGenresReady: false,
-        tvShowsGenres: [] // array di oggetti con chiavi id, genresString
+        tvShowsGenres: [], // array di oggetti con chiavi id, genresString
+        //proprietà milestone 6
+        selectedMovieGenre: 'all',
+        selectedTvShowGenre: 'all'
     },
     methods: {
         resetAdditionalInfo(){
@@ -201,7 +204,45 @@ let app = new Vue({
                 const genresString = this.tvShowsGenres.find(info => info.id == id).genresString;
                 return genresString;
             }
+        },
+        //Metodi per Milestone 6
+        fillSelectGenre(typeOfShow){
+            let url;
+            let selectElement;
+            if(typeOfShow == 'movie'){
+                url = 'https://api.themoviedb.org/3/genre/movie/list?api_key=027db1a08822b62e35522e7cae42f3bf&language=it-IT';
+                selectElement = document.getElementById('movie-genre');
+            } else {
+                url = 'https://api.themoviedb.org/3/genre/tv/list?api_key=027db1a08822b62e35522e7cae42f3bf&language=it-IT';
+                selectElement = document.getElementById('tv-show-genre');
+            }
+
+            axios.get(url)
+            .then(response => {
+                for ( genre of response.data.genres){
+                    const markup = `<option value="${genre.id}">${genre.name}</option>`;
+                    selectElement.insertAdjacentHTML('beforeend', markup);
+                }
+            })
+            .catch(error => console.log(error));
+        },
+        hasSelectedGenre(typeOfShow, id){
+            // TO-DO return true se il film o serie tv con un certo id, ha il genere selezionato
         }
+    },
+    mounted(){
+        this.fillSelectGenre('movie');
+        this.fillSelectGenre('tv');
+
+        document.getElementById('movie-genre').addEventListener('change', function(){
+            this.selectedMovieGenre = this.value;
+            console.log('film',this.selectedMovieGenre);
+        });
+
+        document.getElementById('tv-show-genre').addEventListener('change', function(){
+            this.selectedTvShowGenre = this.value;
+            console.log('tv',this.selectedTvShowGenre);
+        });
     },
     updated(){
         const overlays = document.querySelectorAll('.overlay');
